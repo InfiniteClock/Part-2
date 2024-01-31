@@ -28,9 +28,14 @@ public class Plane : MonoBehaviour
         lineRenderer.positionCount = 1;
         lineRenderer.SetPosition(0, transform.position);
 
-        Vector3 spawn = Camera.main.ScreenToWorldPoint(new Vector3 (Random.Range(0, Screen.width), Random.Range(0, Screen.height), 0));
-        spawn.z = 0;
+
+        speed = Random.Range(1f, 3f);
+        Vector2 spawn = new Vector2(Random.Range(-10f, 10f), Random.Range(-5f, 5f));
         float angle = Mathf.Atan2(-spawn.x, -spawn.y) * Mathf.Rad2Deg;
+
+        // Gives plane a random direction within 45 degrees cone towards center screen
+        // This ensures that the plane always moves onto the screen
+        angle += Random.Range(-45, 45); 
         rb.SetRotation(-angle);
         transform.position = spawn;
     }

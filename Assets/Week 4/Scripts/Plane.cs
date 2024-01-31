@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Plane : MonoBehaviour
 {
+    public List<Sprite> sprites;
     public AnimationCurve landing;
     float landingTimer;
     public List<Vector2> points;
@@ -13,14 +15,24 @@ public class Plane : MonoBehaviour
     public float speed = 1f;
     LineRenderer lineRenderer;
     Rigidbody2D rb;
+    SpriteRenderer spr;
 
     // Start is called before the first frame update
     void Start()
     {
+        spr = GetComponent<SpriteRenderer>();
+        spr.sprite = sprites[Random.Range(0, sprites.Count)];
+
         rb = GetComponent<Rigidbody2D>();
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.positionCount = 1;
         lineRenderer.SetPosition(0, transform.position);
+
+        Vector3 spawn = Camera.main.ScreenToWorldPoint(new Vector3 (Random.Range(0, Screen.width), Random.Range(0, Screen.height), 0));
+        spawn.z = 0;
+        float angle = Mathf.Atan2(-spawn.x, -spawn.y) * Mathf.Rad2Deg;
+        rb.SetRotation(-angle);
+        transform.position = spawn;
     }
     
     private void FixedUpdate()
@@ -64,7 +76,6 @@ public class Plane : MonoBehaviour
                 if(lineRenderer.positionCount != 0) lineRenderer.positionCount--;
             }
         }
-
     }
     private void OnMouseDown()
     {
@@ -85,5 +96,9 @@ public class Plane : MonoBehaviour
             lineRenderer.SetPosition(lineRenderer.positionCount - 1, newPosition);
             lastPosition = newPosition;
         }
+    }
+    private void OnBecameInvisible()
+    {
+        Destroy(gameObject);
     }
 }

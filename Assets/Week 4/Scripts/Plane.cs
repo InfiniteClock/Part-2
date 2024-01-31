@@ -13,7 +13,7 @@ public class Plane : MonoBehaviour
     Vector2 currentPos;
     public float pointThreshold = 0.2f;
     public float speed = 1f;
-    public float tooClose = 1;
+    public float tooClose = 0.7f;
     LineRenderer lineRenderer;
     Rigidbody2D rb;
     SpriteRenderer spr;

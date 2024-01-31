@@ -17,6 +17,7 @@ public class Plane : MonoBehaviour
     LineRenderer lineRenderer;
     Rigidbody2D rb;
     SpriteRenderer spr;
+    public bool land = false;
 
     // Start is called before the first frame update
     void Start()
@@ -56,16 +57,17 @@ public class Plane : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.Space))
+        if (land)
         {
-            landingTimer += 0.2f * Time.deltaTime;
+            landingTimer += 0.5f * Time.deltaTime;
             float interpolation = landing.Evaluate(landingTimer);
 
-            if(transform.localScale.z < 0.2)
+            if(transform.localScale.z < 0.1)
             {
                 Destroy(gameObject);
             }
             transform.localScale = Vector3.Lerp(Vector3.one, Vector3.zero, interpolation);
+            speed -= speed * (interpolation) * Time.deltaTime;
         }
 
         lineRenderer.SetPosition(0, transform.position);
@@ -85,19 +87,28 @@ public class Plane : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        spr.color = Color.red;
+        if (collision.gameObject.layer != 3)
+        {
+            spr.color = Color.red;
+        }
     }
     private void OnTriggerStay2D(Collider2D collision)
     {
-        float distance = Vector3.Distance(transform.position, collision.transform.position);
-        if (distance <= tooClose)
+        if (collision.gameObject.layer != 3)
         {
-            Destroy(gameObject);
+            float distance = Vector3.Distance(transform.position, collision.transform.position);
+            if (distance <= tooClose)
+            {
+                Destroy(gameObject);
+            } 
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        spr.color = Color.white;
+        if (collision.gameObject.layer != 3)
+        {
+            spr.color = Color.white;
+        }
     }
     private void OnMouseDown()
     {

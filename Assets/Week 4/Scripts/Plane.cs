@@ -13,6 +13,7 @@ public class Plane : MonoBehaviour
     Vector2 currentPos;
     public float pointThreshold = 0.2f;
     public float speed = 1f;
+    public float tooClose = 1;
     LineRenderer lineRenderer;
     Rigidbody2D rb;
     SpriteRenderer spr;
@@ -81,6 +82,22 @@ public class Plane : MonoBehaviour
                 if(lineRenderer.positionCount != 0) lineRenderer.positionCount--;
             }
         }
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        spr.color = Color.red;
+    }
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        float distance = Vector3.Distance(transform.position, collision.transform.position);
+        if (distance <= tooClose)
+        {
+            Destroy(gameObject);
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        spr.color = Color.white;
     }
     private void OnMouseDown()
     {

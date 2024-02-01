@@ -59,7 +59,7 @@ public class Plane : MonoBehaviour
     {
         if (land)
         {
-            landingTimer += 0.5f * Time.deltaTime;
+            landingTimer += Time.deltaTime;
             float interpolation = landing.Evaluate(landingTimer);
 
             if(transform.localScale.z < 0.1)
@@ -67,7 +67,6 @@ public class Plane : MonoBehaviour
                 Destroy(gameObject);
             }
             transform.localScale = Vector3.Lerp(Vector3.one, Vector3.zero, interpolation);
-            speed -= speed * (interpolation) * Time.deltaTime;
         }
 
         lineRenderer.SetPosition(0, transform.position);
@@ -101,6 +100,13 @@ public class Plane : MonoBehaviour
             {
                 Destroy(gameObject);
             } 
+        }
+        else
+        {
+            if (collision.OverlapPoint(transform.position))
+            {
+                land = true;
+            }
         }
     }
     private void OnTriggerExit2D(Collider2D collision)

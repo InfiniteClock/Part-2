@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Arrow : MonoBehaviour
+public class Weapon : MonoBehaviour
 {
     public float speed = 5;
     public float damage = 1;
@@ -15,6 +15,7 @@ public class Arrow : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        rb.position = new Vector2(-9, Random.Range(-4f, 4f));
         direction = Vector2.right;
         rb.SetRotation(-Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg);
     }

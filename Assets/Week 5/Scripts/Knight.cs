@@ -9,10 +9,8 @@ public class Knight : MonoBehaviour
     public Rigidbody2D rb;
     public float maxHealth = 5;
     public float health;
-    public float invinceTime = 1;
 
     private bool isDead = false;
-    private float timer;
     private bool selfClick = false;
     private bool attacking = false;
     private Vector2 destination;
@@ -41,7 +39,6 @@ public class Knight : MonoBehaviour
     void Update()
     {
         if (isDead) return;
-        timer -= Time.deltaTime;
         if (Input.GetMouseButtonDown(0) && !selfClick)
         {
             destination = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -69,13 +66,9 @@ public class Knight : MonoBehaviour
     private void TakeDamage(float damage)
     {
         if (isDead) return;
-        if (timer <= 0) 
-        {
-            health -= damage;
-            health = Mathf.Clamp(health, 0, maxHealth);
-            animator.SetTrigger("takeDamage");
-            timer = invinceTime;
-        }
+        health -= damage;
+        health = Mathf.Clamp(health, 0, maxHealth);
+        animator.SetTrigger("takeDamage");
     }
     public void Heal()
     {

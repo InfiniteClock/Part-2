@@ -22,6 +22,7 @@ public class Knight : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         health = maxHealth;
+        SendMessage("SetSlider", maxHealth, SendMessageOptions.DontRequireReceiver);
     }
 
     private void FixedUpdate()
@@ -47,22 +48,22 @@ public class Knight : MonoBehaviour
         animator.SetFloat("movement", movement.magnitude);
         if (health <= 0)
         {
-            isDead = true;
-            animator.SetTrigger("dead");
+            Death();
         }
     }
     private void OnMouseDown()
     {
         if (isDead) return;
         selfClick = true;
-        takeDamage(1);
+        SendMessage("TakeDamage", 1, SendMessageOptions.DontRequireReceiver);
     }
     private void OnMouseUp() {
         selfClick = false;
     }
 
-    private void takeDamage(float damage)
+    private void TakeDamage(float damage)
     {
+        if (isDead) return;
         if (timer <= 0) 
         {
             health -= damage;
@@ -70,5 +71,14 @@ public class Knight : MonoBehaviour
             animator.SetTrigger("takeDamage");
             timer = invinceTime;
         }
+    }
+    public void Heal()
+    {
+        health = maxHealth;
+    }
+    private void Death()
+    {
+        isDead = true;
+        animator.SetTrigger("dead");
     }
 }

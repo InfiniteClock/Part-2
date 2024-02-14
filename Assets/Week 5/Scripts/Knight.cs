@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Knight : MonoBehaviour
 {
@@ -39,7 +40,7 @@ public class Knight : MonoBehaviour
     void Update()
     {
         if (isDead) return;
-        if (Input.GetMouseButtonDown(0) && !selfClick)
+        if (Input.GetMouseButtonDown(0) && !selfClick && !EventSystem.current.IsPointerOverGameObject())
         {
             destination = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         }
@@ -72,8 +73,9 @@ public class Knight : MonoBehaviour
     }
     public void Heal()
     {
-        if (isDead) return;
+        isDead = false;
         health = maxHealth;
+        animator.SetTrigger("takeDamage");
     }
     private void Death()
     {

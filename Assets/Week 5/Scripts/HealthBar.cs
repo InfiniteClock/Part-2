@@ -12,10 +12,14 @@ public class HealthBar : MonoBehaviour
     {
         slider.value -= damage;
     }
-    public void SetSlider(float max)
+    public void SetSliderMax(float max)
     {
         slider.maxValue = max;
         slider.value = max;
+    }
+    public void SetSliderCurrent(float value)
+    {
+        slider.value = value;
     }
     public void Heal()
     {

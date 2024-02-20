@@ -42,8 +42,9 @@ public class Spaceship : MonoBehaviour
             health = PlayerPrefs.GetFloat("health", maxHealth);
         }
         else { health = maxHealth; }
-        transform.position = new Vector3(PlayerPrefs.GetFloat("playerX", 0), (PlayerPrefs.GetFloat("playerY", 0)), 0);
+        transform.position = new Vector3(0, 0, 0);
 
+        SendMessage("Begin", SendMessageOptions.DontRequireReceiver);
         SendMessage("StartHealth",maxHealth, SendMessageOptions.DontRequireReceiver);
         SendMessage("SetHealth", health, SendMessageOptions.DontRequireReceiver);
         SendMessage("StartSpeed", (Mathf.Sqrt(speed*speed+speed*speed)), SendMessageOptions.DontRequireReceiver);
@@ -59,7 +60,7 @@ public class Spaceship : MonoBehaviour
             // Timer for the Lerp
             if (interpolationTimer < 1.0f) 
             {
-                interpolationTimer += 0.05f * Time.deltaTime;
+                interpolationTimer += speed/50 * Time.deltaTime;
             }
             // Collect the interpolation from the animation curve, then get a direction to target.
             // Lerp the current x and y velocities of the ship between existing velocity and direction by interpolation
@@ -115,7 +116,7 @@ public class Spaceship : MonoBehaviour
         SendMessage("SetSpeed", movement.magnitude, SendMessageOptions.DontRequireReceiver);
 
         // Collects mouse inputs on screen and gets a target vector from that. Also resets timer for Lerp in speed changes
-        if (Input.GetMouseButtonDown(0) /*&& !EventSystem.current.IsPointerOverGameObject()*/)
+        if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {
             target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             interpolationTimer = 0;
@@ -170,7 +171,7 @@ public class Spaceship : MonoBehaviour
         health = Mathf.Clamp(health, 0, maxHealth);
         if (health > 0) animator.SetTrigger("takeDamage");
         PlayerPrefs.SetFloat("health", health);
-        SendMessage("Damage", 1, SendMessageOptions.DontRequireReceiver);
+        SendMessage("Damage", damage, SendMessageOptions.DontRequireReceiver);
     }
     public void Death()
     {
@@ -178,6 +179,10 @@ public class Spaceship : MonoBehaviour
         animator.SetTrigger("death");
         PlayerPrefs.SetFloat("health", maxHealth);
         Destroy(gameObject, 3f);
+    }
+    private void OnDestroy()
+    {
+        PlayerPrefs.SetInt("score", 0);
     }
 
 }

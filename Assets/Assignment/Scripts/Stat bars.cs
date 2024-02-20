@@ -8,7 +8,11 @@ public class Statbars : MonoBehaviour
 {
     public Slider health;
     public Slider speed;
-
+    public void Begin()
+    {
+        health = GameObject.FindGameObjectWithTag("Healthbar").GetComponent<Slider>();
+        speed = GameObject.FindGameObjectWithTag("Speedometer").GetComponent <Slider>();
+    }
     public void StartHealth(float value)
     {
         health.maxValue = value;

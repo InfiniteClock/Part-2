@@ -37,8 +37,17 @@ public class Spaceship : MonoBehaviour
         lr.positionCount = 1;
         lr.SetPosition(0, transform.position);
 
-        health = PlayerPrefs.GetFloat("health", maxHealth);
+        if (PlayerPrefs.GetFloat("health", maxHealth) > 0)
+        {
+            health = PlayerPrefs.GetFloat("health", maxHealth);
+        }
+        else { health = maxHealth; }
         transform.position = new Vector3(PlayerPrefs.GetFloat("playerX", 0), (PlayerPrefs.GetFloat("playerY", 0)), 0);
+
+        SendMessage("StartHealth",maxHealth, SendMessageOptions.DontRequireReceiver);
+        SendMessage("SetHealth", health, SendMessageOptions.DontRequireReceiver);
+        SendMessage("StartSpeed", (Mathf.Sqrt(speed*speed+speed*speed)), SendMessageOptions.DontRequireReceiver);
+        SendMessage("SetSpeed", 0, SendMessageOptions.DontRequireReceiver);
 
     }
 
@@ -91,12 +100,20 @@ public class Spaceship : MonoBehaviour
 
     private void Update()
     {
-        if (isDead) return;
+        if (isDead)
+        {
+            lr.positionCount = 0;
+            transform.localScale = new Vector3(transform.localScale.x - 0.1f * Time.deltaTime, 
+                transform.localScale.y - 0.1f * Time.deltaTime, transform.localScale.z);
+            return;
+        }
 
         // Controls the invincibility timer
         if (timer > 0f) timer -= Time.deltaTime;
         else isHurt = false;
-        
+
+        SendMessage("SetSpeed", movement.magnitude, SendMessageOptions.DontRequireReceiver);
+
         // Collects mouse inputs on screen and gets a target vector from that. Also resets timer for Lerp in speed changes
         if (Input.GetMouseButtonDown(0) /*&& !EventSystem.current.IsPointerOverGameObject()*/)
         {
@@ -137,9 +154,10 @@ public class Spaceship : MonoBehaviour
             Death();
         }
 
+        // Temporary damage dealer
         if (Input.GetKeyDown(KeyCode.Space)) 
         {
-            TakeDamage(0);
+            TakeDamage(1);
         }
     }
 
@@ -150,14 +168,16 @@ public class Spaceship : MonoBehaviour
         timer = hurtTimer;
         health -= damage;
         health = Mathf.Clamp(health, 0, maxHealth);
-        animator.SetTrigger("takeDamage");
+        if (health > 0) animator.SetTrigger("takeDamage");
         PlayerPrefs.SetFloat("health", health);
+        SendMessage("Damage", 1, SendMessageOptions.DontRequireReceiver);
     }
     public void Death()
     {
         isDead = true;
         animator.SetTrigger("death");
-        Destroy(gameObject, 1f);
+        PlayerPrefs.SetFloat("health", maxHealth);
+        Destroy(gameObject, 3f);
     }
 
 }

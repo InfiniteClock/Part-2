@@ -12,6 +12,7 @@ public class Obstacle : MonoBehaviour
     public float lifetime;
     public float rotationSpeed;
 
+    private float actualSpeed;      // Needed for difficulty shifts
     public Transform sprite;
     private Rigidbody2D rb;
 
@@ -19,6 +20,18 @@ public class Obstacle : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
 
+        if (PlayerPrefs.GetInt("difficulty") == 3)
+        {
+            actualSpeed = speed * 2;
+        }
+        else if (PlayerPrefs.GetInt("difficulty") == 2)
+        {
+            actualSpeed = speed * 1.5f;
+        }
+        else
+        {
+            actualSpeed = speed;
+        }
         // Sets random direction and magnitude of spin to obstacle
         rotationSpeed *= Random.Range(-1f, 1f);
 
@@ -51,7 +64,7 @@ public class Obstacle : MonoBehaviour
     private void FixedUpdate()
     {
         // Set the obstacle to 
-        rb.MovePosition(rb.position + (Vector2)transform.up * speed * Time.deltaTime);
+        rb.MovePosition(rb.position + (Vector2)transform.up * actualSpeed * Time.deltaTime);
         Vector3 angle = new Vector3(0,0,transform.rotation.z * rotationSpeed * Time.deltaTime);
         sprite.Rotate(angle);
     }
@@ -64,6 +77,7 @@ public class Obstacle : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         collision.gameObject.SendMessage("TakeDamage", damage, SendMessageOptions.DontRequireReceiver);
+        PlayerPrefs.SetInt("score", PlayerPrefs.GetInt("score") - 1);   // Counters the score increasing when the object disappears
         Destroy(gameObject);
     }
 }

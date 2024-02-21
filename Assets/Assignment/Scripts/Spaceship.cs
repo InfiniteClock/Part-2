@@ -3,6 +3,7 @@ using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Spaceship : MonoBehaviour
 {
@@ -37,9 +38,29 @@ public class Spaceship : MonoBehaviour
         lr.positionCount = 1;
         lr.SetPosition(0, transform.position);
 
-        if (PlayerPrefs.GetFloat("health", maxHealth) > 0)
+        if (PlayerPrefs.GetInt("difficulty") == 3)
+        {
+            maxHealth = 5;
+            speed = 5;
+            hurtTimer = 1;
+        }
+        else if (PlayerPrefs.GetInt("difficulty") == 2)
+        {
+            maxHealth = 7;
+            speed = 10;
+            hurtTimer = 2;
+        }
+        else
+        {
+            maxHealth = 10;
+            speed = 15;
+            hurtTimer = 3;
+        }
+
+        if (PlayerPrefs.GetFloat("health",0) > 0 && PlayerPrefs.GetFloat("health",maxHealth) <= maxHealth)
         {
             health = PlayerPrefs.GetFloat("health", maxHealth);
+            PlayerPrefs.SetFloat("health", maxHealth);
         }
         else { health = maxHealth; }
         transform.position = new Vector3(0, 0, 0);
@@ -155,11 +176,12 @@ public class Spaceship : MonoBehaviour
             Death();
         }
 
+        /*
         // Temporary damage dealer
         if (Input.GetKeyDown(KeyCode.Space)) 
         {
             TakeDamage(1);
-        }
+        }*/
     }
 
     public void TakeDamage(float damage)
@@ -169,7 +191,7 @@ public class Spaceship : MonoBehaviour
         timer = hurtTimer;
         health -= damage;
         health = Mathf.Clamp(health, 0, maxHealth);
-        if (health > 0) animator.SetTrigger("takeDamage");
+        if (health > 0 && damage > 0) animator.SetTrigger("takeDamage");
         PlayerPrefs.SetFloat("health", health);
         SendMessage("Damage", damage, SendMessageOptions.DontRequireReceiver);
     }
@@ -177,12 +199,15 @@ public class Spaceship : MonoBehaviour
     {
         isDead = true;
         animator.SetTrigger("death");
-        PlayerPrefs.SetFloat("health", maxHealth);
         Destroy(gameObject, 3f);
     }
     private void OnDestroy()
     {
-        PlayerPrefs.SetInt("score", 0);
+        if (PlayerPrefs.GetFloat("health") <= 0) 
+        {
+            PlayerPrefs.SetInt("score", 0); 
+        }
+        SceneManager.LoadScene(4);
     }
 
 }

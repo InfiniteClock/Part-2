@@ -123,7 +123,7 @@ MonoBehaviour:
   speed: 1
   damage: -1
   lifetime: 1
-  rotationSpeed: 0
+  rotationSpeed: 180
   sprite: {fileID: 8985120851866584797}
 --- !u!212 &4767631837799508507
 SpriteRenderer:
@@ -249,7 +249,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0, g: 0.3557007, b: 0.7924528, a: 1}
   m_FlipX: 0
@@ -419,7 +419,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0, g: 0.3557007, b: 0.7924528, a: 1}
   m_FlipX: 0

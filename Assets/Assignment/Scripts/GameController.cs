@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -25,6 +26,19 @@ public class GameController : MonoBehaviour
         score = PlayerPrefs.GetInt("score", 0);
         highScore.text = record.ToString();
         currentScore.text = score.ToString();
+        if (PlayerPrefs.GetInt("difficulty") == 3)
+        {
+            spawnSpeed = 0.5f;
+        }
+        else if (PlayerPrefs.GetInt("difficulty") == 2)
+        {
+            spawnSpeed = 1;
+        }
+        else
+        {
+            spawnSpeed = 2;
+        }
+
     }
     private void Update()
     {
@@ -36,7 +50,7 @@ public class GameController : MonoBehaviour
         else
         {
             timer = spawnSpeed;
-            Instantiate(Obstacles[Random.Range(0, Obstacles.Length-1)], new Vector3(-10,-10,0), transform.rotation);
+            Instantiate(Obstacles[Random.Range(0, Obstacles.Length)], new Vector3(-10,-10,0), transform.rotation);
         }
         currentScore.text = score.ToString();
 
@@ -45,6 +59,13 @@ public class GameController : MonoBehaviour
             record = score;
             highScore.text = record.ToString();
             PlayerPrefs.SetInt("highscore", record);
+        }
+    }
+    public void Pause()
+    {
+        if (PlayerPrefs.GetFloat("health") > 0f)
+        {
+            SceneManager.LoadScene(4);
         }
     }
 }

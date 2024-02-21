@@ -101,6 +101,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectedCol: {r: 0.40943396, g: 0.77735794, b: 1, a: 1}
+  speed: 100
 --- !u!50 &6158846776775674766
 Rigidbody2D:
   serializedVersion: 4

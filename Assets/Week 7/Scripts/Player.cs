@@ -7,6 +7,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public Color selectedCol;
+    public float speed = 100;
     private SpriteRenderer spr;
     private Rigidbody2D rb;
     private Color baseColor;
@@ -33,5 +34,11 @@ public class Player : MonoBehaviour
         {
             spr.color = baseColor;
         }
+    }
+    public void Move(Vector2 direction)
+    {
+        float angle = Mathf.Atan2 (direction.x, direction.y) * Mathf.Rad2Deg;
+        rb.SetRotation(-angle);
+        rb.AddForce(direction * speed, ForceMode2D.Impulse);
     }
 }

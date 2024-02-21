@@ -3,11 +3,15 @@ using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Controller : MonoBehaviour
 {
     public static Player selectedPlayer { get; private set; }
+    public static int score;
     public Slider chargeSlider;
+    public TextMeshProUGUI scoreText;
+    private float oldScore;
     public float maxCharge;
     private float charge;
     private Vector2 direction;
@@ -15,6 +19,7 @@ public class Controller : MonoBehaviour
     public void Start()
     {
         chargeSlider.maxValue = maxCharge;
+        score = 0;
     }
     public static void SelectPlayer(Player selection)
     {
@@ -32,6 +37,12 @@ public class Controller : MonoBehaviour
     }
     private void Update()
     {
+        if (score != oldScore)
+        {
+            scoreText.text = score.ToString();
+            oldScore = score;
+        }
+
         if (selectedPlayer == null) return;
 
         if (Input.GetKeyDown(KeyCode.Space))

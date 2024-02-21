@@ -7,6 +7,7 @@ using UnityEditor.Experimental.GraphView;
 
 public class GoalkeeperController : MonoBehaviour
 {
+    public float goalKeeperSpeed = 0.05f;
     public Rigidbody2D goalkeeper;
     private Transform centerLine;
     public float goalkeeperDistance;
@@ -22,11 +23,13 @@ public class GoalkeeperController : MonoBehaviour
         if (Controller.selectedPlayer != null) direction = Controller.selectedPlayer.transform.position - centerLine.position;
         if (direction.magnitude > goalkeeperDistance*2) 
         {
-            goalkeeper.position = (Vector2)centerLine.position + direction.normalized * goalkeeperDistance;
+            goalkeeper.position = Vector2.MoveTowards
+                (goalkeeper.position,(Vector2)centerLine.position + direction.normalized * goalkeeperDistance, goalKeeperSpeed);
         }
         else
         {
-            goalkeeper.position = (Vector2)centerLine.position + direction/2;
+            goalkeeper.position = Vector2.MoveTowards
+                (goalkeeper.position, (Vector2)centerLine.position + direction / 2, goalKeeperSpeed);
         }
         
     }

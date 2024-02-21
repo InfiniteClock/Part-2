@@ -635,6 +635,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0e92f71ec19dc641a4bb06699cb10e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  goalKeeperSpeed: 0.05
   goalkeeper: {fileID: 8780023363458888309}
   goalkeeperDistance: 2.5
 --- !u!4 &292055754
@@ -3403,8 +3404,8 @@ EdgeCollider2D:
   - {x: 7.86756, y: -3.5000405}
   - {x: 7.873641, y: 4.8699684}
   - {x: 2.4826612, y: 4.8792753}
-  - {x: 2.4760635, y: 6.3192053}
-  - {x: -2.4733584, y: 6.3262353}
+  - {x: 2.489062, y: 5.513335}
+  - {x: -2.4863567, y: 5.520366}
   - {x: -2.475846, y: 4.8862906}
   m_AdjacentStartPoint: {x: 0, y: 0}
   m_AdjacentEndPoint: {x: 0, y: 0}
